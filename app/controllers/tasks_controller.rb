@@ -3,7 +3,12 @@ class TasksController < ApplicationController
     before_action :require_user_logged_in
     
     def index
-        @tasks = Task.order(created_at: :desc).page(params[:page]).per(3)
+        # 前の→@tasks = Task.order(created_at: :desc).page(params[:page]).per(3)
+        # models/user内に、has_many :tasksが記載してあり、1対多の構造なので、下記の通り取得できる。
+        # createと同じこと
+        # current_userはsessions_helperを参照
+        @tasks = current_user.tasks.order(created_at: :desc).page(params[:page]).per(3)
+        # @tasks = Task.where(user_id: current_user.id).order(created_at: :desc).page(params[:page]).per(3)
     end
     
     def show
